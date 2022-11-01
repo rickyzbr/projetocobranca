@@ -7,7 +7,7 @@
         <meta content="CriareInfo" name="author" />
         <link rel="shortcut icon" href="dist/img/icon_company.ico">
 
-        <link href="{{url('dist/css/style.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('dist/css/style.css')}}" rel="stylesheet" type="text/css">
 </head>
 
 
@@ -109,27 +109,27 @@
 	<!-- /HK Wrapper -->
 
     <!-- jQuery -->
-    <script src=" {{url('vendors/jquery/dist/jquery.min.js')}}"></script>
+    <script src=" {{asset('vendors/jquery/dist/jquery.min.js')}}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="{{url('vendors/popper.js/dist/umd/popper.min.js')}}"></script>
-    <script src="{{url('vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('vendors/popper.js/dist/umd/popper.min.js')}}"></script>
+    <script src="{{asset('vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 
     <!-- Slimscroll JavaScript -->
-    <script src="{{url('dist/js/jquery.slimscroll.js')}}"></script>
+    <script src="{{asset('dist/js/jquery.slimscroll.js')}}"></script>
 
     <!-- Fancy Dropdown JS -->
-    <script src="{{url('dist/js/dropdown-bootstrap-extended.js')}}"></script>
+    <script src="{{asset('dist/js/dropdown-bootstrap-extended.js')}}"></script>
 
     <!-- Owl JavaScript -->
-    <script src="{{url('vendors/owl.carousel/dist/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('vendors/owl.carousel/dist/owl.carousel.min.js')}}"></script>
 
     <!-- FeatherIcons JavaScript -->
-    <script src="{{url('dist/js/feather.min.js')}}"></script>
+    <script src="{{asset('dist/js/feather.min.js')}}"></script>
 
     <!-- Init JavaScript -->
-    <script src="{{url('dist/js/init.js')}}"></script>
-    <script src="{{url('dist/js/login-data.js')}}"></script>
+    <script src="{{asset('dist/js/init.js')}}"></script>
+    <script src="{{asset('dist/js/login-data.js')}}"></script>
 </body>
 
 </html>

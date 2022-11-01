@@ -20,28 +20,53 @@ class ClientsController extends Controller
 {
     private $clients;
     private $totalPage = 15;
-    private $path = 'clients';   
+    private $path = 'clients';
 
     public function __construct(AttachmentsClients $AttachmentsClients, Clients $clients)
     {
         $this->AttachmentsClients = $AttachmentsClients;
         $this->clients = $clients;
-    }  
+    }
 
     public function index(Clients $clients)
     {
         //$banners = auth()->user()->bannerCreate()->paginate($this->totalPage);
         $clients = $this->clients->paginate($this->totalPage);
+
         $totalClients = Clients::count();
         $cargos = Cargo::all();
         $statuses = ClientStatus::all();
         $typeSales = TypesSalesClient::all();
         $countReleases = Releases::where('status_id', 3)->count();
-        return view('clients.index', compact ('clients', 'totalClients', 'typeSales', 'cargos', 'statuses', 'countReleases'));   
+
+        $teste = DB::table('clients')
+            ->join('partners_clients', 'partners_clients.client_id', '=', 'clients.id')
+            ->select('clients.id as id', 'clients.name as name', 'clients.phone01 as phone', DB::raw('count(partners_clients.client_id) as partners'))
+            ->groupBy('clients.name')
+            ->take(5)
+            ->get();
+
+
+
+//        if($clients_teste['releases']){
+//            foreach ($clients_teste['releases'] as  $itemRelease) {
+//
+//                dd($itemRelease['amount']);
+//            }
+////            dd($releases);
+//        }
+
+
+
+
+
+        return view('clients.index', compact ('clients', 'totalClients', 'typeSales', 'cargos', 'statuses', 'countReleases'));
     }
 
     public function create()
     {
+
+
         $totalClients = Clients::count();
         $statuses = ClientStatus::all();
         $typeSales = TypesSalesClient::all();
@@ -51,7 +76,7 @@ class ClientsController extends Controller
 
     public function store(Request $request)
     {
-        
+
         DB::beginTransaction();
 
         $dataForm = $request->except('_token');
@@ -61,7 +86,7 @@ class ClientsController extends Controller
 
         // Define finalmente o nome
         $nameFile = Str::slug($request->name) . '.' . $request->image->getClientOriginalExtension();
-       
+
 
         // Faz o upload:
         $upload = $request->image->storeAs($this->path, $nameFile);
@@ -77,11 +102,11 @@ class ClientsController extends Controller
         }
 
         $insert = auth()->user()->clients()->create($dataForm);
-                
+
         if ($insert){
 
             DB::commit();
-        
+
             return redirect()
                         ->route ('clients.index')
                         ->with('success', 'O Novo Cliente foi Adicionado com Sucesso ! ');
@@ -106,15 +131,15 @@ class ClientsController extends Controller
         $statuses = ClientStatus::all();
         $typeSales = TypesSalesClient::all();
         $typeTerminations = TypesTerminationClient::all();
-        return view ('clients.edit', compact('client', 'totalClients', 'statuses', 'typeSales', 'typeTerminations'));      
+        return view ('clients.edit', compact('client', 'totalClients', 'statuses', 'typeSales', 'typeTerminations'));
     }
 
     public function update(Request $request, $id)
     {
-        
+
         if (!$client = Clients::find($id))
             return redirect()->route('clients.index');
-       
+
         $dataForm = $request->except('_token');
         $dataForm['active'] = ( !isset($dataForm['active']) ) ? 0 : 1;
 
@@ -124,7 +149,7 @@ class ClientsController extends Controller
 
         // Define finalmente o nome
         $nameFile = Str::slug($request->name) . '.' . $request->image->getClientOriginalExtension();
-       
+
 
         // Faz o upload:
         $upload = $request->image->storeAs($this->path, $nameFile);
@@ -139,11 +164,11 @@ class ClientsController extends Controller
 
 
         $update = $client->update($dataForm);
-                
+
         if ($update){
 
             DB::commit();
-        
+
             return redirect()
                         ->route ('clients.index')
                         ->with('success', 'O Produto foi atualizado com sucesso ! ');
@@ -166,9 +191,9 @@ class ClientsController extends Controller
         }
         $statuses = ClientStatus::all();
         $typeSales = TypesSalesClient::all();
-    
-        
-        return view ('clients.view', compact('client', 'statuses', 'typeSales'));      
+
+
+        return view ('clients.view', compact('client', 'statuses', 'typeSales'));
     }
 
     public function destroy($id)
@@ -177,16 +202,16 @@ class ClientsController extends Controller
             return redirect()->route('clients.index');
 
         $client->delete();
-        
+
         return redirect()->route('clients.index')->with('success', 'O Cliente foi Deletado com sucesso ! ');
     }
 
     public function uploadFiles($id, Request $request)
     {
 
-            
+
         //$client = $this->clients->find($id);
-        $client  = $this->clients->find($id); 
+        $client  = $this->clients->find($id);
 
         //        image upload
         $image=$request->file('file');
@@ -202,11 +227,11 @@ class ClientsController extends Controller
         return "done";
         // Product::create($formInput);
     }
-    
+
 
     public function searchClient (Request $request, Clients $client)
     {
-        
+
         $totalClients = Clients::count();
         $cargos = Cargo::all();
         $statuses = ClientStatus::all();
